@@ -7,15 +7,15 @@ Config variables
 """
 
 # Set up authentication for this Twitter app.
-oa_access_token = 'samplee320asuyiuwepjdiwu2'
-oa_access_token_secret = 'samplemnbxcpw8383'
-consumer_key = 'samplepekdncisyqgeq8d44d'
-consumer_secret = 'sampleooojwydcw53ip'
+oa_access_token = 'changeMe'
+oa_access_token_secret = 'changeMeToo'
+consumer_key = 'Hey I am different'
+consumer_secret = 'changeMePlz'
 
 # We read and write to the same data file, popping the first
 # line off it and tweeting that line. If your data file is not
 # in the same directory as this script, use a full path.
-data_file_name = 'data.txt'
+data_file_name = 'animaux.txt'
 
 # String tacked onto the end of tweets to indicate that the 
 # sentence is comprised of multiple tweets. Be sure to include

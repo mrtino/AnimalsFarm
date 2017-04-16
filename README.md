@@ -1,58 +1,46 @@
-# Overview
+# La Ferme des Animaux
 
-Line Tweetbot reads data from a file, one line at a time, and tweets the data. If the line is longer than Twitter's limit of 140 characters, it splits the line up into smaller chunks (breaking on a space to ensure that words are not split across two tweets), and tweets all chunks in succession. It adds elipses ([...]) to the end of each tweet if the line is comprised of multiple tweets.
+Ce bot, basé sur [Line Tweetbot](https://github.com/mjordan/linetweetbot), lit le fichier texte animaux.txt et publie une ligne à la fois 
+sur le compte [@FermeAnimaux](https://twitter.com/FermeAnimaux).
 
-A twitter account that uses Line Tweetbot is [Transient Creatures](https://twitter.com/WotWSentences), which tweets the entirety of H.G. Wells' _War of the Worlds_ one sentence at a time, in reading order.
+## Prérequis
 
-Each line in the data file will become a tweet (or set of tweets), starting with the first line and working downward. After a line from the data file is tweeted, it is removed from the file. This means that unless you add lines to the file over time, Line Tweetbot will eventually tweet every line in the file.
+* Un compte Twitter dédié.
+* Un fichier texte du livre (autre que la Ferme des Animaux éventuellement). 
+* Python (et Perl pour formater le fichier texte).
 
-## General prerequisites
+## Prérequis Python
 
-* A Twitter acccount for Line Tweetbot to tweet to.
-* A data file. 
-* Python (and in some cases Perl).
-
-## Python prerequisites
-
-Line Tweetbot is written in Python. It uses the [Python Twitter Tools](http://mike.verdone.ca/twitter/) library, so you will need to make sure it is installed. Instructions are provided on the PTT website.
+Un bon coup de `pip install twitter` et c'est tout.
 
 ## Perl requirements
 
-Line Tweetbot includes a simple Perl script, sentences2lines.pl, that converts a narrative text into a Line Tweetbot data file containing one sentence per line. You only need to use it (or worry about Perl requirements) if you want to split a narrative text like a Project Gutenberg book into one sentence per line so you can tweet the sentences. 
+`cpan Lingua::Sentence` et `cpan File::Slurp` suffisent.
 
-sentences2lines.pl uses the [Lingua::Sentence module](http://search.cpan.org/~achimru/Lingua-Sentence-1.00/lib/Lingua/Sentence.pm) which you will need to install, and the File::Slurp module, both of which install via cpan easily.
+## Pour utiliser le bot sur Twitter
 
-## Configuring your Twitter account so it can use Line Tweetbot as an app
+Il va falloir un compte Twitter avec les clés API nécessaires à l'envoi de tweets.
 
-Before Line Tweetbot can send tweets to an account, you will need to obtain the required API keys and authorize Line Tweetbot as an app in the account.
+1. Va sur https://apps.twitter.com/ en te connectant avec le compte Twitter à utiliser.
+2. Crée une nouvelle app avec le nom et la description qui va bien.
+3. Si ce n'est pas le cas, change les permissions de l'app en 'Read and Write'.
+4. Dans Settings, génère les clés OAuth.
 
-1. Log into https://dev.twitter.com/apps using the Twitter credientials for the account you want Line Tweetbot to tweet to.
-2. Create a new app. It doesn't matter what you call it but it probably should have a relatively descriptive title.
-3. Fill in the required fields under the Settings tab. In the Application Type section, the only setting you need to change is the application type -- make sure it is set to 'Read and Write'.
-3. Generate OAuth keys.
+## Exécution du bot
 
-It can take a little while for all the settings for your new app to become registered with Twitter.
+Une fois les clés de l'API Twitter obtenues, ajoute-les dans la partie "Config variables" dans line_tweetbot.py. Il faudra aussi indiquer 
+l'emplacement du livre (`/home/utilisateur/animals/animaux.txt` par exemple).
 
-The final step is to approve your app to access your Twitter account.
+Pour envoyer les tweets manuellement, il suffit d'exécuter la commande `python line_tweetbot.py` (on peut enlever le `python` en rendant 
+exécutable le fichier avec `chmod +x line_tweetbot.py`) dans le dossier contenant les fichiers.
 
-1. In your account's Settings options, choose Apps.
-2. Your application should appear in the list of approved apps. If it doesn't, wait a while and check again. Generating API keys in the previous step should make the app appear automatically but as stated above, it can take a few minutes for the app settings to register with Twitter.
+Pour les envoyer de manière automatique, on peut utiliser cron. cron permet d'automatiser les tâches, nous allons automatiser l'envoi de 
+tweets toutes les 5 minutes :
+`crontab -e`, `*/5 * * * * cd /home/utilisateur/animals && ./line_tweetbot.py`
 
-## Running Line Tweetbot
+Mettre une valeur plus petite que 5 minutes voit le risque de se faire bloquer son compte par Twitter. Techniquement, on peut faire 15 
+requêtes par tranches de 15 minutes, on peut tout aussi bien faire un envoi toutes les minutes, mais c'est risqué.
 
-Once you have your Twitter consumer and OAuth API keys, add them to the "Config variables" section in line_tweetbot.py. You will also need to indicate the filename or path of your input file.
+## Licence
 
-Sending tweets from your data file is as simple as running the line_tweetbot.py script manually, from a cronjob, etc.
-
-## License
-
-Public domain. See LICENSE file for details.
-
-## Development
-
-Improvements and bug fixes are welcome.
-
-1. [Fork the repository](https://help.github.com/articles/fork-a-repo)
-2. Fix a bug, add an improvement. 
-3. [Submit a pull request](https://help.github.com/articles/creating-a-pull-request) explaining what your code does.
-
+Domaine Public.
